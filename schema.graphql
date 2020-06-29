@@ -1,0 +1,162 @@
+scalar DateTime
+
+"""
+議員
+"""
+type Member{
+	id: ID!
+	name: String!
+	firstName: String
+	lastName: String
+	nameHira: String
+	firstNameHira: String
+	lastNameHira: String
+	current: Boolean!
+	house: House!
+	electedBy: [Election!]!
+	submittedBills: [Bill!]!
+	attendedDiets: [Diet!]!
+	attendedMinutes: [Minutes!]!
+}
+
+"""
+議会
+"""
+enum House{
+	SYUGIIN
+	SANGIIN
+}
+
+enum ElectionType{
+	CONSTITUENCY
+	PROPORTIONAL
+}
+
+"""
+選挙
+"""
+type Election{
+	id: ID!
+	electionType: ElectionType!
+	district: String!
+	prefecture: String
+	datetime: DateTime!
+	electedMembers: [Member!]!
+}
+
+"""
+国会
+"""
+type Diet{
+	id: ID!
+	number: Int!
+	name: String!
+	first: DateTime
+	last: DateTime
+	bills: [Bill!]!
+	minutes: [Minutes!]!
+}
+
+"""
+法律
+"""
+type Law{
+	id: ID!
+	ndlId: String
+	eGovId: String
+	eGovUrl: String
+	lawTitle: String!
+	lawNumber: String!
+	discussedAt: [Minutes!]!
+	referencedBy: [Law!]!
+	amendedBy: [Bill!]!
+}
+
+enum BillCategory{
+	KAKUHOU
+	SYUHOU
+	SANHOU
+}
+
+enum BillType{
+	NEW
+	AMENDMENT
+}
+
+enum BillStatus{
+	IN_REVIEW
+	ACCEPTED
+	WITHDRAWN
+}
+
+"""
+議案
+"""
+type Bill{
+	id: ID!
+	ndlId: String
+	ndlUrl: String
+	billTitle: String!
+	billNumber: String!
+	billCategory: BillCategory!
+	billType: BillType!
+	billStatus: BillStatus!
+	submittedBy: [Member!]!
+	submittedTo: Diet!
+	discussedAt: [Minutes!]!
+	ammends: [Law!]!
+	syugiinUrl: String
+	sangiinUrl: String
+	overviewUrl: String
+	essentialUrl: String
+	comparisonUrl: String
+	pullRequestUrl: String
+}
+
+"""
+委員会
+"""
+type Meeting{
+	id: ID!
+	name: String!
+	members: [Member!]!
+	minutes: [Minutes!]!
+}
+
+"""
+議事録
+"""
+type Minutes{
+	id: ID!
+	ndlId: String
+	ndlUrl: String
+	minutesNumber: String!
+	start: DateTime
+	end: DateTime
+	meeting: Meeting
+	participants: [Member!]!
+	heldAt: Diet
+	topics: [String!]!
+	discussedBills: [Bill!]!
+	discussedLaws: [Law!]!
+}
+
+type Query{
+	totalMembers: Int!
+	allMembers: [Member!]!
+	totalElections: Int!
+	allElections: [Election!]!
+	totalDiets: Int!
+	allDiets: [Diet!]!
+	totalLaws: Int!
+	allLaws: [Law!]!
+	totalBills: Int!
+	allBills: [Bill!]!
+	totalMeetings: Int!
+	allMeetings: [Meeting!]!
+	totalMinutes: Int!
+	allMinutes: [Minutes!]!
+}
+schema{
+	query: Query
+}

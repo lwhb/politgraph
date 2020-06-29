@@ -1,0 +1,18 @@
+# Ignore everything
+*
+
+# Whitelist anything that's a directory
+!*/
+
+# ignore certain directory
+node_modules/
+
+# Add all the file types I'm interested in.
+!.gitignore
+!*.md
+!*.js
+!*.graphql
+!package.json
+
+# add all the filename I'm interested in.
+!sample/*.json
